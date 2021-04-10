@@ -185,7 +185,7 @@ Test open Browser to IP Address the Virtual machines.
 
 1. Open another browser window but this time by using InPrivate mode and verify whether the target vm changes (as indicated by the message).
 
-## Lab #02 - Azure Application Gateway
+## Lab #02 - Azure Application Gateway (30 minutes)
 
 1. On the Azure portal menu or from the **Home** page, select **Create a resource**. The **New** window appears.
 
