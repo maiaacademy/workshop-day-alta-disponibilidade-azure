@@ -306,7 +306,7 @@ Add Backend targets:
 
 1. In **Load balancing options**, select **Azure load balancer**.
 
-1. In **Select a load balancer**, select **ALBWEB** that you created earlier.
+1. In **Select a load balancer**, create a new Azure Load Balancer.
 
 1. For **Select a backend pool**, select **Create new**, type **BP-VMSSWEB**, then select **Create**.
 
