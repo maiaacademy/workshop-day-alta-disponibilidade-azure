@@ -19,12 +19,12 @@ Mentoria Arquiteto Cloud - Hands-on Lab
     | Region | select one of the regions that support availability zones and where you can provision Azure virtual machines | 
     | Availability options | **Availability zone** |
     | Availability zone | **1** and **2** |
-    | Image | **Windows Server 2019 Datacenter - Gen1** |
+    | Image | **Ubuntu Server 18.04 LTS - Gen1** |
     | Azure Spot instance | **No** |
-    | Size | **Standard B2s** |
+    | Size | **Standard B1ms** |
     | Username | **admaz** |
     | Password | **Azur3Exp3rt*** |
-    | Public inbound ports | **RDP (3389)** |
+    | Public inbound ports | **SSH (22)** |
     | Would you like to use an existing Windows Server license? | **No** |
 
 1. Click **Next: Disks >** and, on the **Disks** tab of the **Create a virtual machine** blade, specify the following settings (leave others with their default values):
@@ -54,30 +54,19 @@ Mentoria Arquiteto Cloud - Hands-on Lab
     | Properties storage account | Name: **sadiag####**, Account kind: StorageV2, Performance: Standard, Replication: Locally-redundant-storage (LRS) |
     | Enable auto-shutdown | off |   
 
+1. Click **Next: Advanced >**, on the **Advanced** tab of the **Custom data and cloud init** blade, add script for install NGINX Web Server.
+
+1. Copy and paste script, on the Create cloud-init config, [click here](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/tutorial-load-balancer#create-virtual-machines)
+
 1. Click **Review + Create**.
 
 1. On the **Review + Create** blade, click **Create**.
 
 1. Repeat a new Virtual Machine **VMWEB02**
 
-1. Connect Virtual machine.
-
-1. Complete deploy Virtual Machines.
-
 1. Check two Virtual machines create successful.
 
 1. Connect the Virtual machines.
-
-1. Install the Web-Server feature and configure Static page in the virtual machines by running the following command in the **Administrator Windows PowerShell ISE** command prompt. You can copy and paste this command.
-
-   ```powershell
-   # Install Web server
-   Install-WindowsFeature -name Web-Server -IncludeManagementTools
-   # Remove default Web page
-   Remove-item  C:\inetpub\wwwroot\iisstart.htm
-   # Configure new Web page
-   Add-Content -Path "C:\inetpub\wwwroot\iisstart.htm" -Value $("Azure Expert VM is running " + $env:computername)
-   ```
 
 **Note**
 Test open Browser to IP Address the Virtual machines.
@@ -209,8 +198,7 @@ Test open Browser to IP Address the Virtual machines.
    - **Tier**: Select **Standard v2***.
    - **Enable autoscaling**: Select **No**.
    - **Instance count**: Select **Two**.
-   - **Availabity zone**: Select **Zone 1, Zone 2 and Zone 3**.
-
+   - **Availabity zone**: Select **Zone 1, Zone 2, Zone 3**.
 
  2. Under **Configure virtual network**, select **VNET-Hub**, enter the following values to create the subnet:
 
@@ -260,13 +248,15 @@ Test open Browser to IP Address the Virtual machines.
 
 7. Select **Next: Tags** and then **Next: Review + create**.
 
-1. Add backend targets:
+1. Disassociate VMs on the Load Balancer Standard.
 
 To do this, you'll:
 
 1. On the Azure portal menu, select **All resources** or search for and select **ALBWEB**.
 
 1. Disassociate VMs, **VMWEB01** and **VMWEB02** on the Load Balancer, in the Backend pool.
+
+Add Backend targets:
 
 1. On the Azure portal menu, select **All resources** or search for and select *All resources*. Then select **AAGWEB**.
 
@@ -288,23 +278,23 @@ To do this, you'll:
 2. Copy the public IP address, and then paste it into the address bar of your browser to browse that IP address.
 3. Check the response. A valid response verifies that the application gateway was successfully created and can successfully connect with the backend.
 
-   Refresh the browser multiple times and you should see connections to both myVM and myVM2.
+   Refresh the browser multiple times and you should see connections to both **VMWEB01** and **VMWEB02**.
 
-## Lab #03 - Azure Virtual Machine Scale Sets (30 minutes)
+## Lab #03 - Azure Virtual Machine Scale Sets (45 minutes)
 
 1. Log in to the **Azure portal** at https://portal.azure.com.
 
 1. Type **Scale set** in the search box. In the results, under **Marketplace**, select **Virtual machine scale sets**. Select **Create** on the **Virtual machine scale sets** page, which will open the **Create a virtual machine scale set** page.
 
-1. In the **Basics** tab, under **Project details**, make sure the correct subscription is selected and then choose to **Create new** resource group. Type **RGNAME-VMS** for the name and then select **OK**.
+1. In the **Basics** tab, under **Project details**, make sure the correct subscription is selected and then choose to **Create new** resource group. Type **RG-VMSS** for the name and then select **OK**.
 
-1. Type **VMMSSWEB** as the name for your scale 
-set.
+1. Type **VMSSWEB** as the name for your scale set.
 
 1. In **Region**, select a region that is close to your area.
 
-1. Leave the default value of **ScaleSet VMs** for **Orchestration mode**.
-1. Select a marketplace image for **Image**.
+1. Leave the default value of **Uniform** for **Orchestration mode**.
+
+1. Select a marketplace image **Windows Server 2019 Datacenter - Gen1** for **Image**.
 
 1. Enter your desired username, and password.
 
@@ -315,15 +305,60 @@ set.
 1. On the **Networking** page, under **Load balancing**, select **Yes** to put the scale set instances behind a load balancer. 
 
 1. In **Load balancing options**, select **Azure load balancer**.
-1. In **Select a load balancer**, select **ALBNAME** that you created earlier.
 
-1. For **Select a backend pool**, select **Create new**, type **BP-VMMSS*, then select **Create**.
+1. In **Select a load balancer**, select **ALBWEB** that you created earlier.
+
+1. For **Select a backend pool**, select **Create new**, type **BP-VMSS-WEB*, then select **Create**.
+
+1. On the **Scaling** page, under **Instance**, select **2** and **Scaling policy**, select **Manual**. 
+
+1. On the **Management** page, under **Monitoring**, select **Enable with custom storage account**.
 
 1. When you are done, select **Review + create**. 
 
 1. After it passes validation, select **Create** to deploy the scale set.
 
+1. In **Virtual Machine Scale Sets**, select **Instances** and connect on Virtual machines.
+
+1. Install the Web-Server feature in the all Virtual machines by running the following command in the **Administrator Windows PowerShell** command prompt. You can copy and paste this command.
+
+   ```powershell
+   Install-WindowsFeature -name Web-Server -IncludeManagementTools
+   ```
+1. Back in the portal, navigate back to the Overview blade of **Virtual Machine Scale Sets** and, use the Click to clipboard button to copy the public IP address.
+
 1. In a **Browser**, navigate to the Public IP Address the VMSS.
+
+1. Sign in to the [**Azure portal**](http://portal.azure.com) and open Azure Cloud Shell.
+
+1. In Cloud Shell, start the code editor and create a file named **VMSS-Install-WebServer.ps1**.
+
+1. Add the following text to the file:
+
+  ```powershell
+   # Set Script 
+$customConfig = @{ 
+  "fileUris" = (,"https://raw.githubusercontent.com///VMSS-Install-IIS_v1.ps1"); 
+  "commandToExecute" = "powershell -ExecutionPolicy Unrestricted -File VMSS-Install-IIS_v1.ps1" 
+} 
+
+    # Set VMSS variables
+$rgname = "rgname"
+$vmssname = "vmssname"
+ 
+    # Get VMSS object 
+$vmss = Get-AzVmss -ResourceGroupName $rgname -VMScaleSetName $vmssname
+ 
+    # Add VMSS extension 
+$vmss = Add-AzVmssExtension -Name "CustomScript" -VirtualMachineScaleSet $vmss -Publisher "Microsoft.Compute" -Type "CustomScriptExtension" -TypeHandlerVersion "1.9" -Setting $customConfig
+
+    # Update VMSS 
+Update-AzVmss -ResourceGroupName $rgname -Name $vmssname -VirtualMachineScaleSet $vmss
+   ```
+
+1. Press Ctrl+S to save the file. Then press Ctrl+Q to close the code editor.
+
+1. Run the following command **./VMSS-Install-WebServer.ps1**
 
 ## Lab #03 - Azure App Service (30 minutes)
 
