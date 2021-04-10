@@ -38,7 +38,7 @@ Mentoria Arquiteto Cloud - Hands-on Lab
 
     | Setting | Value | 
     | --- | --- |
-    | Virtual Network | **VNET-Hub** |
+    | Virtual Network | the name of a virtual network **VNET-Hub** |
     | Subnet | **Default** |
     | Public IP | **VMWEB01-PI** |
     | NIC network security group | **None** |
@@ -195,7 +195,7 @@ Test open Browser to IP Address the Virtual machines.
 
    - **Resource group**: Select **RG-Network** for the resource group. If it doesn't exist, select **Create new** to create it.
    - **Application gateway name**: Enter **AAGWEB** for the name of the application gateway.
-   - **Tier**: Select **Standard v2***.
+   - **Tier**: Select **Standard v2**.
    - **Enable autoscaling**: Select **No**.
    - **Instance count**: Select **Two**.
    - **Availabity zone**: Select **Zone 1, Zone 2, Zone 3**.
@@ -308,7 +308,7 @@ Add Backend targets:
 
 1. In **Select a load balancer**, select **ALBWEB** that you created earlier.
 
-1. For **Select a backend pool**, select **Create new**, type **BP-VMSS-WEB*, then select **Create**.
+1. For **Select a backend pool**, select **Create new**, type **BP-VMSSWEB**, then select **Create**.
 
 1. On the **Scaling** page, under **Instance**, select **2** and **Scaling policy**, select **Manual**. 
 
