@@ -441,8 +441,8 @@ Implement a High Availability Multi-region
 **Important Notes**
 - Two Virtual Networks in different regions;
 - Two Virtual Machines per region;
-- Use Ubunt Server with Nginx;
-- Azure Load Balancer or Application Gateway per region (opcional Web Application Firewall);
+- Ubuntu Servers with Nginx;
+- Azure Load Balancer or Application Gateway (optional enable to Web Application Firewall) per region;
 - Azure Traffic Manager with Performance routing methods.
 
 References: [Multi-region N-tier application](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/n-tier/multi-region-sql-server)
