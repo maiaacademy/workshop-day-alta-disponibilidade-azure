@@ -331,20 +331,20 @@ Add Backend targets:
 
 1. Sign in to the [**Azure portal**](http://portal.azure.com) and open Azure Cloud Shell.
 
-1. In Cloud Shell, start the code editor and create a file named **VMSS-Install-WebServer.ps1**.
+1. In Cloud Shell, start the code editor and create a file named **VMSS-Add-CustomExtension.ps1**.
 
-1. Add the following text to the file:
+1. Add the following text to the script file:
 
   ```powershell
-   # Set Script 
+    # Set Script 
 $customConfig = @{ 
-  "fileUris" = (,"https://raw.githubusercontent.com///VMSS-Install-IIS_v1.ps1"); 
+  "fileUris" = (,"https://raw.githubusercontent.com/maiaacademy/azureexpert/master/Mod06-AllFiles/VMSS-Install-IIS_v1.ps1"); 
   "commandToExecute" = "powershell -ExecutionPolicy Unrestricted -File VMSS-Install-IIS_v1.ps1" 
 } 
 
     # Set VMSS variables
-$rgname = "rgname"
-$vmssname = "vmssname"
+$rgname = "rg-vmss"
+$vmssname = "vmssweb"
  
     # Get VMSS object 
 $vmss = Get-AzVmss -ResourceGroupName $rgname -VMScaleSetName $vmssname
@@ -358,7 +358,7 @@ Update-AzVmss -ResourceGroupName $rgname -Name $vmssname -VirtualMachineScaleSet
 
 1. Press Ctrl+S to save the file. Then press Ctrl+Q to close the code editor.
 
-1. Run the following command **./VMSS-Install-WebServer.ps1**
+1. Run the following command **./VMSS-Add-CustomExtension.ps1**.
 
 ## Lab #03 - Azure App Service (30 minutes)
 
