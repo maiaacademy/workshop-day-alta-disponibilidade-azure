@@ -322,7 +322,7 @@ Add Backend targets:
 
 1. Sign in to the [**Azure portal**](http://portal.azure.com) and open Azure Cloud Shell.
 
-1. In Cloud Shell, start the code editor and execute command **Code Add-CustomExtension-VMSS.ps1**.
+1. In Cloud Shell, start the code editor and execute command **code add-customextension-vmss.ps1**.
 
 1. Add the following text to the script file:
 
@@ -349,7 +349,7 @@ Update-AzVmss -ResourceGroupName $rgname -Name $vmssname -VirtualMachineScaleSet
 
 1. Press Ctrl+S to save the file. Then press Ctrl+Q to close the code editor.
 
-1. Run the following command **./Add-CustomExtension-VMSS.ps1**.
+1. Run the following command **./add-customextension-vmss.ps1**.
 
 1. In **VMSSWEB**, select **Extensions** and check a new extension.
 
