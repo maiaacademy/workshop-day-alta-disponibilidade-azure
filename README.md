@@ -432,7 +432,7 @@ Implement a High Availability Web Application
 
 1.  Select the **Deploy to Azure** button below to open the Azure portal and launch the template deployment for the Contoso sample application. Log in to the Azure portal using your subscription credentials if you are prompted to do so.
 
-    [![Button to deploy the Contoso sample application template to Azure.](https://aka.ms/deploytoazurebutton "Deploy the Contoso sample application template to Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/)
+    [![Button to deploy the Contoso sample application template to Azure.](https://aka.ms/deploytoazurebutton "Deploy the Contoso sample application template to Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmaiaacademy%2Fworkshop-alta-disponibilidade-azure%2Fmaster%2FAllFiles%2FScripts%2Ftemplate.json)
 
 
 ## Ninja Project - High Availability Web Application Multi-region (60 minutes)
