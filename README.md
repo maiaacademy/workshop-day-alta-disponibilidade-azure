@@ -430,11 +430,11 @@ Implement a High Availability Web Application
 
 1. Deploy the Contoso sample application, which you will use in this project.
 
-1.  Select the **Deploy to Azure** button below to open the Azure portal and launch the template deployment for the Contoso sample application - part 1. Log in to the Azure portal using your subscription credentials if you are prompted to do so.
+1.  Select the **Deploy to Azure** button below to open the Azure portal and launch the template deployment for the Contoso sample application. Log in to the Azure portal using your subscription credentials if you are prompted to do so.
 
     [![Button to deploy the Contoso sample application template to Azure.](https://aka.ms/deploytoazurebutton "Deploy the Contoso sample application template to Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmaiaacademy%2Fworkshop-alta-disponibilidade-azure%2Fmaster%2FAllFiles%2FScripts%2Ftemplate.json)
 
-1.  Select the **Deploy to Azure** button below to open the Azure portal and launch the template deployment for the additional infrastructure components that will be used to enable high availability for the Contoso application - part 2. Log in to the Azure portal using your subscription credentials if you are prompted to do so.
+1.  Select the **Deploy to Azure** button below to open the Azure portal and launch the template deployment for the additional infrastructure components that will be used to enable high availability for the Contoso application.
 
     [![Button to deploy the Contoso High Availability resource template to Azure.](https://aka.ms/deploytoazurebutton "Deploy the Contoso HA resources to Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmaiaacademy%2Fworkshop-alta-disponibilidade-azure%2Fmaster%2FAllFiles%2FScripts%2Ftemplate-ha.json)
 
