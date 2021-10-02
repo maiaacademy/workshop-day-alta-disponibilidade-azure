@@ -421,7 +421,21 @@ Update-AzVmss -ResourceGroupName $rgname -Name $vmssname -VirtualMachineScaleSet
 
     > **Note**: You might need to wait a few minutes.
 
-## Project - High Availability Multi-region (60 minutes)
+
+## Project - High Availability Web Application (60 minutes)
+
+Implement a High Availability Web Application
+
+   ![Screenshot of HAWA](/AllFiles/Images/High-Availability.png)
+
+1. Deploy the Contoso sample application, which you will use in this project.
+
+1.  Select the **Deploy to Azure** button below to open the Azure portal and launch the template deployment for the Contoso sample application. Log in to the Azure portal using your subscription credentials if you are prompted to do so.
+
+    [![Button to deploy the Contoso sample application template to Azure.](https://aka.ms/deploytoazurebutton "Deploy the Contoso sample application template to Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/)
+
+
+## Ninja Project - High Availability Web Application Multi-region (60 minutes)
 
 Implement a High Availability Multi-region
 
@@ -430,7 +444,6 @@ Implement a High Availability Multi-region
 **Important Notes**
 - Two Virtual Networks in different regions;
 - Two Virtual Machines per region;
-- Ubuntu Servers with Nginx;
 - Azure Load Balancer or Application Gateway (optional enable to Web Application Firewall) per region;
 - Azure Traffic Manager with Performance routing methods.
 
