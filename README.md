@@ -322,7 +322,7 @@ Add Backend targets:
 
 1. Sign in to the [**Azure portal**](http://portal.azure.com) and open Azure Cloud Shell.
 
-1. In Cloud Shell, start the code editor and create a file named **Add-CustomExtension-VMSS.ps1**.
+1. In Cloud Shell, start the code editor and execute command **Code Add-CustomExtension-VMSS.ps1**.
 
 1. Add the following text to the script file:
 
