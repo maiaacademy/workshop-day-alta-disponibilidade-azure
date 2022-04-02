@@ -14,7 +14,7 @@ Mentoria Arquiteto Cloud - Hands-on Lab
     | Setting | Value | 
     | --- | --- |
     | Subscription | the name of the Azure subscription you will be using in this lab |
-    | Resource group | the name of a new resource group **RG-Network** |
+    | Resource group | the name of a new resource group **RG-MAC-HA** |
     | Virtual machine name | **VMWEB01** and **VMWEB02** |
     | Region | select one of the regions that support availability zones and where you can provision Azure virtual machines | 
     | Availability options | **Availability zone** |
@@ -23,7 +23,7 @@ Mentoria Arquiteto Cloud - Hands-on Lab
     | Azure Spot instance | **No** |
     | Size | **Standard B1ms** |
     | Username | **admaz** |
-    | Password | **Azur3Exp3rt*** |
+    | Password | **M3nt0r1aArqu1t3t0**** |
     | Public inbound ports | **SSH (22)** |
     | Would you like to use an existing Windows Server license? | **No** |
 
@@ -78,7 +78,7 @@ Test open Browser to IP Address the Virtual machines.
     | Setting | Value |
     | --- | --- |
     | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource group | **RG-Network** |
+    | Resource group | **RG-MAC-HA** |
     | Name | **ALBWEB** |
     | Region| name of the Azure region into which you deployed all other resources in this lab |
     | Type | **Public** |
@@ -146,7 +146,7 @@ Test open Browser to IP Address the Virtual machines.
     | Setting | Value |
     | --- | --- |
     | Subscription | the name of the Azure subscription you are using in this lab |
-    | Resource Group | **RG-Network** |
+    | Resource Group | **RG-MAC-HA** |
     | Name | **NSG-ALB-WEB** |
     | Region | the name of the Azure region where you deployed all other resources in this lab |
 
@@ -193,7 +193,7 @@ Test open Browser to IP Address the Virtual machines.
 
 1. On the **Basics** tab, enter these values for the following application gateway settings:
 
-   - **Resource group**: Select **RG-Network** for the resource group. If it doesn't exist, select **Create new** to create it.
+   - **Resource group**: Select **RG-MAC-HA** for the resource group. If it doesn't exist, select **Create new** to create it.
    - **Application gateway name**: Enter **AAGWEB** for the name of the application gateway.
    - **Tier**: Select **Standard v2**.
    - **Enable autoscaling**: Select **No**.
