@@ -24,7 +24,7 @@ Mentoria Arquiteto Cloud - Hands-on Lab
     | Size | **Standard B1ms** |
     | Username | **admaz** |
     | Password | **Arqu1t3t0Cl0ud**** |
-    | Public inbound ports | **SSH (22)** |
+    | Public inbound ports | **SSH (22) and HTTP (80)** |
     | Would you like to use an existing Windows Server license? | **No** |
 
 1. Click **Next: Disks >** and, on the **Disks** tab of the **Create a virtual machine** blade, specify the following settings (leave others with their default values):
