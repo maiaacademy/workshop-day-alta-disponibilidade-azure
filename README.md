@@ -23,7 +23,7 @@ Mentoria Arquiteto Cloud - Hands-on Lab
     | Azure Spot instance | **No** |
     | Size | **Standard B1ms** |
     | Username | **admaz** |
-    | Password | **M3nt0r1aArqu1t3t0**** |
+    | Password | **Arqu1t3t0Cl0ud**** |
     | Public inbound ports | **SSH (22)** |
     | Would you like to use an existing Windows Server license? | **No** |
 
