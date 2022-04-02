@@ -79,12 +79,12 @@ Test open Browser to IP Address the Virtual machines.
     | --- | --- |
     | Subscription | the name of the Azure subscription you are using in this lab |
     | Resource group | **RG-HA** |
-    | Name | **ALBWEB** |
+    | Name | **ALB-WEB** |
     | Region| name of the Azure region into which you deployed all other resources in this lab |
     | Type | **Public** |
     | SKU | **Standard** |
     | Public IP address | **Create new** |
-    | Public IP address name | **ALBWEB-PI** |
+    | Public IP address name | **ALB-WEB-PI** |
     | Availability zone | **Zone-redundant** |
     | Add a public IPv6 address | **No** |
 
@@ -92,7 +92,7 @@ Test open Browser to IP Address the Virtual machines.
 
 1. On the deployment blade, click **Go to resource**.
 
-1. On the **ALBWEB** load balancer blade, click **Backend pools** and click **+ Add**.
+1. On the **ALB-WEB** load balancer blade, click **Backend pools** and click **+ Add**.
 
 1. Add a backend pool with the following settings (leave others with their default values):
 
@@ -252,7 +252,7 @@ Test open Browser to IP Address the Virtual machines.
 
 To do this, you'll:
 
-1. On the Azure portal menu, select **All resources** or search for and select **ALBWEB**.
+1. On the Azure portal menu, select **All resources** or search for and select **ALB-WEB**.
 
 1. Disassociate VMs, **VMWEB01** and **VMWEB02** on the Load Balancer, in the Backend pool.
 
