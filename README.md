@@ -444,6 +444,172 @@ Implement a High Availability Web Application
 
 References: [HA N-tier application](https://docs.microsoft.com/en-us/azure/architecture/high-availability/ref-arch-iaas-web-and-db)
 
+### Configure High-Availability (HA) for the SQL Server with Always On
+
+In this task, you will build a Windows Failover Cluster and configure SQL Always On Availability Groups to create a high-availability database tier.
+
+1. From the Azure portal home page, select **+ Create a resource**. Select **Storage account**.
+
+2. Complete the **Create storage account** form using the following details:
+
+    - **Resource group**: Use existing / ContosoRG1
+    - **Storage account name**: Unique name starting with `###sqlwitness`
+    - **Location**: Any location in your area that is **NOT** your Primary or Secondary site.
+    - **Performance**: Standard
+    - **Replication**: Zone-redundant storage (ZRS)
+    - **Access tier (default)**: Hot
+
+3. Switch to the **Advanced** tab. Change the **Minimum TLS version** to **Version 1.0**. Then select **Review + Create**, followed by **Create**.
+
+
+    > **Note**: To promote the use of the latest and most secure standards, by default, Azure storage accounts require TLS version 1.2. This storage account will be used as a Cloud Witness for our SQL Server cluster. SQL Server requires TLS version 1.0 for the Cloud Witness.
+
+4. Once the storage account is created, navigate to the storage account blade. Select **Access keys** under **Security + networking**. Toggle the **Show/Hide keys button** (Shown as hide keys in the screenshot), copy the **storage account name** and the **first access key**, and paste them into your text editor of choice - you will need these values later.
+
+
+5. Return to the Azure portal and navigate to the **Load balancer** blade. Select **Backend pools** and open **BackEndPool1**.
+
+
+6. In the **BackendPool1** blade, select **+ Add** and choose the two SQL VMs. Select **Add** to close. Select **Save** to add these SQL VMs to **BackEndPool1**.
+
+    > **Note**: The load-balancing rule in the load balancer has been created with **Floating IP (direct server return)** enabled. This is important when using the Azure load balancer for SQL Server AlwaysOn Availability Groups.
+
+7. From the Azure portal, navigate to the **SQLVM1** virtual machine. Select **Connect**, then choose **RDP or Bastion**.
+
+8. Connect to the machine using the following credentials:
+
+    - **Username**: `demouser@contoso.com`
+    - **Password**: `Demo!pass123`
+
+    > **Note**: When using Azure Bastion to connect to a VM using domain credentials, the username must be specified in the format `user@domain-fqdn` and **not** in the format `domain\user`.
+
+9. On **SQLVM1**, select **Start** and then choose **Windows PowerShell**.
+
+10. Copy and paste the following command into PowerShell and execute it. This will create the Windows Failover Cluster and add all the SQL VMs as nodes in the cluster. It will also assign a static IP address of **10.0.2.99** to the new Cluster named **AOGCLUSTER**.
+
+    ```PowerShell
+    New-Cluster -Name AOGCLUSTER -Node SQLVM1,SQLVM2 -StaticAddress 10.0.2.99
+    ```
+
+    >**Note**: It is possible to use a wizard for this task, but the resulting cluster will require additional configuration to set the static IP address in Azure.
+
+11. After the cluster has been created, select **Start** and then **Windows Administrative Tools**. Locate and open the **Failover Cluster Manager**.
+
+
+12. When the cluster opens, select **Nodes**, and the SQL Server VMs will show as nodes of the cluster and show their status as **Up**.
+
+13. If you select **Roles**, you will notice that currently, there aren't any roles assigned to the cluster.
+
+14. Select Networks, and you will see **Cluster Network 1** with status **Up**. If you navigate to the network, you will see the IP address space, and on the lower tab, you can select **Network Connections** and review the nodes.
+
+15. Right-click **AOGCLUSTER,** then select **More Actions**, **Configure Cluster Quorum Settings**.
+
+16. On **Before you Begin** in the wizard, select **Next**. Then choose **Select the quorum witness**. Then, select **Next** again.
+
+
+17. Select **Configure a cloud witness** and **Next**.
+
+
+18. Copy the **storage account name** and **storage account key** values you noted earlier and paste them into their respective fields on the form. Leave the Azure Service endpoint as configured. Then, select **Next**.
+
+
+19. Select **Next** on the Confirmation.
+
+
+20. Select **Finish**.
+
+21. Select the name of the Cluster again, and the **Cloud Witness** should now appear in the **Cluster Resources**. It is important to always use a third data center; in your case, a third Azure Region is used for your Cloud Witness.
+
+22. Select **Start** and launch **SQL Server 2017 Configuration Manager**.
+
+
+23. Select **SQL Server Services**, then right-click **SQL Server (MSSQLSERVER)** and select **Properties**.
+
+
+24. Select the **AlwaysOn High Availability** tab and check the box for **Enable Always OnAvailability Groups**. Select **Apply** and then select **OK** on the message that notifies you that changes won't take effect until after the server is restarted.
+
+25. On the **Log On** tab, change the service account to `contoso\demouser` with the password `Demo!pass123`. Select **OK** to accept the changes, and then select **Yes** to confirm the restart of the server.
+
+26. Return to the Azure portal and open a new Azure Bastion session to **SQLVM2**. Launch **SQL Server 2017 Configuration Manager** and repeat the steps above to **Enable SQL AlwaysOn** and change the **Log On** username. Make sure that you have restarted the SQL Service.
+
+27. Return to your session with **SQLVM1**. Use the Start menu to launch **Microsoft SQL Server Management Studio 18** and connect to the local instance of SQL Server. (Located in the Microsoft SQL Server Tools folder).
+
+28. Select **Connect** to sign on to **SQLVM1**. **Note**: The username for your lab should show **CONTOSO\demouser**.
+
+29. Right-click **Always On High Availability**, then select **New Availability Group Wizard**.
+
+30. Select **Next** on the Wizard.
+
+31. Provide the name **BCDRAOG** for the **Availability group name**, then select **Next**.
+
+32. Select the **ContosoInsurance Database**, then select **Next**.
+
+33. On the **Specify Replicas** screen next to **SQLVM1**, select **Automatic Failover**.
+
+34. Select **Add Replica**.
+
+35. On the **Connect to Server** dialog box, enter the Server Name of **SQLVM2**and select **Connect**. **Note**: The username for your lab should show **CONTOSO\demouser**.
+
+36. For **SQLVM2**, select Automatic Failover and Availability Mode of Synchronous commit.
+
+37. Select **Endpoints** and review these that the wizard has created.
+
+38. Next, select **Listener**. Then, select the **Create an availability group listener**.
+
+39. Add the following details:
+
+    - **Listener DNS Name**: BCDRAOG
+    - **Port**: 1433
+    - **Network Mode**: Static IP
+
+40. Next, select **Add**.
+
+41. Select the Subnet of **10.0.2.0/24** and then add IPv4 **10.0.2.100** and select **OK**. This is the IP address of the Internal Load Balancer that is in front of the **SQLVM1** and **SQLVM2** in the **Data** subnet running in the **Primary** Site.
+
+42. Select **Next**.
+
+43. On the **Select Initial Data Synchronization** screen, ensure that **Automatic seeding** is selected and select **Next**.
+
+44. On the **Validation** screen, you should see all green. Select **Next**.
+
+45. On the Summary page, select **Finish**.
+
+46. Once the AOG is built, check that each task was successful and select **Close**.
+
+47. Move back to **SQL Management Studio** on **SQLVM1** and expand the **Always On High Availability** item in the tree view. Under Availability Groups, expand the **BCDRAOG (Primary)** item.
+
+48. Right-click **BCDRAOG (Primary)** and then select **Show Dashboard**. You should see that all the nodes have been added and are now "Green".
+
+49. Next, select **Connect** and then **Database Engine** in SQL Management Studio.
+
+50. Enter **BCDRAOG** as the Server Name. This will be connected to the listener of the group that you created. **Note**: The username for your lab should show **CONTOSO\demouser**.
+
+51. Once connected to the **BCDRAOG**, you can select **Databases** and will be able to see the database there. Notice that you do not know directly which server this is running on.
+
+52. Move back to **PowerShell** on **SQLVM1**. Open a new file, paste in the following script, and select the **Play** button. This will update the Failover cluster with the IP address of the Listener that you created for the AOG.
+
+    ```Powershell
+    $ClusterNetworkName = "Cluster Network 1"
+    $IPResourceName = "BCDRAOG_10.0.2.100"
+    $ILBIP = "10.0.2.100"
+    Import-Module FailoverClusters
+    Get-ClusterResource $IPResourceName | Set-ClusterParameter -Multiple @{"Address"="$ILBIP";"ProbePort"="59999";"SubnetMask"="255.255.255.255";"Network"="$ClusterNetworkName";"EnableDhcp"=0}
+    Stop-ClusterResource -Name $IPResourceName
+    Start-ClusterResource -Name "BCDRAOG"
+    ```
+
+53. Move back to SQL Management Studio, select **Connect**, and then **Database Engine**.
+
+54. This time, put the following into the IP address of the Internal Load balancer of the **Primary** Site AOG Load Balancer: **10.0.2.100**. You again will be able to connect to the server, which is up and running as the master. **Note**: The username for your lab should show **CONTOSO\demouser**.
+
+55. Once connected to **10.0.2.100**, you can select **Databases** and will be able to see the database there. Notice that you do not know directly which server this is running on.
+
+    > **Note**: It could take a minute to connect the first time as this goes through the Azure Internal Load Balancer.
+
+56. Move back to Failover Cluster Manager on **SQLVM1**, and you can review the IP Addresses that were added by selecting Roles and **BCDRAOG** and viewing the Resources. Notice how the **10.0.2.100** is Online.
+
+You have now successfully set up the SQL Server VMs to use Always On Availability Groups with a Cloud Witness storage account located in another region.
+
 1. End of day and **Workshop Day 03**.
 
 1. Continue in the **Mentoria Arquiteto Cloud**.
