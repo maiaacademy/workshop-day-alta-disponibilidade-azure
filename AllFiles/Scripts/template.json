@@ -2,6 +2,18 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "skuSizeVM": {
+            "defaultValue": "D2s_v3",
+            "type": "string",
+            "metadata": {
+                "description": "Size of Virtual Machines to use"
+            },
+            "allowedValues": [
+                "D2s_v3",
+                "D2s_v5",
+                "DC2s_v3"
+            ]
+        },
         "adminUsername": {
             "type": "string",
             "defaultValue": "demouser",
@@ -22,22 +34,30 @@
             "metadata": {
                 "description": "The FQDN of the Active Directory Domain to be created"
             }
+        },
+        "baseUri": {
+            "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/microsoft/MCW-Building-a-resilient-IaaS-architecture/"
+        },
+        "resourceFolder": {
+            "type": "string",
+            "defaultValue": "master/Hands-on%20lab/Resources/"
         }
     },
     "variables": {
-        "vnetName": "VNet1",
-        "baseUri": "https://cloudworkshop.blob.core.windows.net/building-resilient-iaas-architecture/lab-resources/june-2020-update/"
+        "vnetName": "VNet1"
     },
     "resources": [
         {
             "name": "VirtualNetwork",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2016-09-01",
-            "dependsOn": [],
+            "dependsOn": [
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(variables('baseUri'), 'templates/vnet.json')]",
+                    "uri": "[concat(parameters('baseUri'), parameters('resourceFolder'), 'templates/vnet.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -57,10 +77,19 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(variables('baseUri'), 'templates/deploy-advm.json')]",
+                    "uri": "[concat(parameters('baseUri'),parameters('resourceFolder'), 'templates/deploy-advm.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
+                    "skuSizeVM": {
+                        "value": "[parameters('skuSizeVM')]"
+                    },
+                    "baseUri": {
+                        "value": "[parameters('baseUri')]"
+                    },
+                    "resourceFolder": {
+                        "value": "[parameters('resourceFolder')]"
+                    },
                     "ADVMName": {
                         "value": "ADVM1"
                     },
@@ -95,7 +124,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(variables('baseUri'), 'templates/vnet.json')]",
+                    "uri": "[concat(parameters('baseUri'),parameters('resourceFolder'), 'templates/vnet.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -120,10 +149,19 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(variables('baseUri'), 'templates/deploy-webvm.json')]",
+                    "uri": "[concat(parameters('baseUri'),parameters('resourceFolder'), 'templates/deploy-webvm.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
+                    "skuSizeVM": {
+                        "value": "[parameters('skuSizeVM')]"
+                    },
+                    "baseUri": {
+                        "value": "[parameters('baseUri')]"
+                    },
+                    "resourceFolder": {
+                        "value": "[parameters('resourceFolder')]"
+                    },
                     "WebVMName": {
                         "value": "WebVM1"
                     },
@@ -161,10 +199,19 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(variables('baseUri'), 'templates/deploy-sqlvm.json')]",
+                    "uri": "[concat(parameters('baseUri'),parameters('resourceFolder'), 'templates/deploy-sqlvm.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
+                    "skuSizeVM": {
+                        "value": "[parameters('skuSizeVM')]"
+                    },
+                    "baseUri": {
+                        "value": "[parameters('baseUri')]"
+                    },
+                    "resourceFolder": {
+                        "value": "[parameters('resourceFolder')]"
+                    },
                     "SqlVMName": {
                         "value": "SQLVM1"
                     },
@@ -184,11 +231,32 @@
                         "value": "[parameters('domainName')]"
                     },
                     "SQLDownloadUrl": {
-                        "value": "[concat(variables('baseUri'), 'application/ContosoInsurance.bak')]"
+                        "value": "[concat(parameters('baseUri'),parameters('resourceFolder'), 'application/ContosoInsurance.bak')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "Bastion",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/VirtualNetworkWithDNS"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('baseUri'),parameters('resourceFolder'), 'templates/bastion.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "BastionSubnetId": {
+                        "value": "[reference('VirtualNetwork').outputs.BastionSubnetId.value]"
                     }
                 }
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+    }
 }
