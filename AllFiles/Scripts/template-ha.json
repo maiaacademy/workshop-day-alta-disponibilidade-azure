@@ -3,15 +3,14 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "skuSizeVM": {
-            "defaultValue": "D2s_v3",
+            "defaultValue": "Standard_B2s",
             "type": "string",
             "metadata": {
                 "description": "Size of Virtual Machines to use"
             },
             "allowedValues": [
-                "D2s_v3",
-                "D2s_v5",
-                "DC2s_v3"
+                "Standard_B2s",
+                "Standard_B2ms"
             ]
         },
         "adminUsername": {
@@ -58,6 +57,106 @@
         "ADSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'Identity')]"
     },
     "resources": [
+        {
+            "name": "ADVM2",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2016-09-01",
+            "dependsOn": [
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('baseUri'), parameters('resourceFolder'), 'templates/deploy-advm.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "skuSizeVM": {
+                        "value": "[parameters('skuSizeVM')]"
+                    },
+                    "baseUri": {
+                        "value": "[parameters('baseUri')]"
+                    },
+                    "resourceFolder": {
+                        "value": "[parameters('resourceFolder')]"
+                    },
+                    "ADVMName": {
+                        "value": "ADVM2"
+                    },
+                    "AvailabilityZone": {
+                        "value": "2"
+                    },
+                    "ADSubnetId": {
+                        "value": "[variables('ADSubnetId')]"
+                    },
+                    "ADVMPrivateIPAddress": {
+                        "value": "10.0.3.101"
+                    },
+                    "adminUserName": {
+                        "value": "[parameters('adminUserName')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "domainName": {
+                        "value": "[parameters('domainName')]"
+                    },
+                    "newDomain": {
+                        "value": false
+                    }
+                }
+            }
+        },
+        {
+            "name": "LoadBalancers",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2016-09-01",
+            "dependsOn": [
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('baseUri'), parameters('resourceFolder'), 'templates/load-balancers.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "Environment": {
+                        "value": "Primary"
+                    },
+                    "DataSubnetId": {
+                        "value": "[variables('DataSubnetId')]"
+                    },
+                    "SQLLBPrivateIPAddress": {
+                        "value": "10.0.2.100"
+                    }
+                }
+            }
+        },
+        {
+            "name": "VirtualNetworkWithDNS",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2016-09-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/ADVM2"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(parameters('baseUri'), parameters('resourceFolder'), 'templates/vnet.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "VNetName": {
+                        "value": "[variables('vnetName')]"
+                    },
+                    "DNSIPs": {
+                        "value": [
+                            "[parameters('existingDNSServer')]",
+                            "[reference('ADVM2').outputs.ADVM1PrivateIP.value]"
+                        ]
+                    }
+                }
+            }
+        },
         {
             "name": "WebVM2",
             "type": "Microsoft.Resources/deployments",
