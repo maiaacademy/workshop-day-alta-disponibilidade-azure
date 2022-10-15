@@ -3,15 +3,14 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "skuSizeVM": {
-            "defaultValue": "D2s_v3",
+            "defaultValue": "Standard_B2s",
             "type": "string",
             "metadata": {
                 "description": "Size of Virtual Machines to use"
             },
             "allowedValues": [
-                "D2s_v3",
-                "D2s_v5",
-                "DC2s_v3"
+                "Standard_B2s",
+                "Standard_B2ms"
             ]
         },
         "adminUsername": {
